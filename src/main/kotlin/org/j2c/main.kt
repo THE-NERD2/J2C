@@ -1,7 +1,6 @@
 package org.j2c
 
 import javassist.ClassPool
-import javassist.CtClass
 import javassist.NotFoundException
 import javassist.bytecode.Mnemonic
 import org.j2c.assembly.NClass
@@ -35,13 +34,9 @@ val pool = ClassPool()
 @OptIn(ExperimentalStdlibApi::class)
 fun parse(name: String): NClass? {
     try {
-        val kclass: KClass<*>
-        val nclass: NClass
-        val ctclass: CtClass
-
-        kclass = classLoader.loadClass(name).kotlin
-        nclass = NClass(kclass.qualifiedName!!, kclass.simpleName!!)
-        ctclass = pool.get(name)
+        val kclass = classLoader.loadClass(name).kotlin
+        val nclass = NClass(kclass.qualifiedName!!, kclass.simpleName!!)
+        val ctclass = pool.get(name)
 
         kclass.members.forEach {
             if(it is KProperty) {
@@ -96,8 +91,6 @@ fun init(path: String) {
 fun main(args: Array<String>) {
     init(args[0])
     parse(args[1])
-    getClasses().forEach {
-        LLVM.createAST(it)
-    }
+    getClasses().forEach(LLVM::createAST)
     LLVM.finishCodeGen()
 }
