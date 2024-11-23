@@ -3,6 +3,7 @@ package org.j2c.assembly.rules
 import javassist.bytecode.Opcode
 import org.j2c.assembly.NBoundAssignment
 import org.j2c.assembly.NBoundReference
+import org.j2c.assembly.NStaticAssignment
 import org.j2c.assembly.NStaticReference
 import org.j2c.assembly.findNClassByFullName
 
@@ -12,6 +13,12 @@ object STATIC {
         val i = instructions.u16bitAt(pos + 1)
         val fld = const.getFieldrefName(i)
         stack.add(NStaticReference(fld))
+    }
+    val PUTSTATIC = Rule(Opcode.PUTSTATIC) { instructions, pos, const, _, stack ->
+        val i = instructions.u16bitAt(pos + 1)
+        val fld = const.getFieldrefName(i)
+        val newV = stack.pop()
+        stack.add(NStaticAssignment(fld, newV))
     }
 }
 

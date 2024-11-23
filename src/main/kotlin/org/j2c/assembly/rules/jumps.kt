@@ -44,12 +44,27 @@ object JUMPS {
     }
     val ARETURN = Rule(Opcode.ARETURN) { instructions, _, _, _, stack ->
         val v = stack.pop()
-        stack.add(NAReturn(v))
+        stack.add(NValueReturn("a", v))
         GOTO.endFollow(instructions, stack)
     }
     val IRETURN = Rule(Opcode.IRETURN) { instructions, _, _, _, stack ->
         val v = stack.pop()
-        stack.add(NIReturn(v))
+        stack.add(NValueReturn("i", v))
+        GOTO.endFollow(instructions, stack)
+    }
+    val LRETURN = Rule(Opcode.LRETURN) { instructions, _, _, _, stack ->
+        val v = stack.pop()
+        stack.add(NValueReturn("l", v))
+        GOTO.endFollow(instructions, stack)
+    }
+    val FRETURN = Rule(Opcode.FRETURN) { instructions, _, _, _, stack ->
+        val v = stack.pop()
+        stack.add(NValueReturn("f", v))
+        GOTO.endFollow(instructions, stack)
+    }
+    val DRETURN = Rule(Opcode.DRETURN) { instructions, _, _, _, stack ->
+        val v = stack.pop()
+        stack.add(NValueReturn("d", v))
         GOTO.endFollow(instructions, stack)
     }
     val ATHROW = Rule(Opcode.ATHROW) { instructions, _, _, _, stack ->

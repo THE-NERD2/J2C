@@ -7,6 +7,10 @@ import org.j2c.assembly.NReference
 
 @RuleContainer
 object ALOAD {
+    val ALOAD = Rule(Opcode.ALOAD) { instructions, pos, _, vars, stack ->
+        val i = instructions.byteAt(pos + 1)
+        stack.add(NReference(vars[i] ?: "???"))
+    }
     val ALOAD_0 = Rule(Opcode.ALOAD_0) { _, _, _, vars, stack ->
         stack.add(NReference(vars[0] ?: "???"))
     }
@@ -23,6 +27,17 @@ object ALOAD {
 
 @RuleContainer
 object ASTORE {
+    val ASTORE = Rule(Opcode.ASTORE) { instructions, pos, _, vars, stack ->
+        val i = instructions.byteAt(pos + 1)
+        val newV = stack.pop()
+        vars[i] = "avar$i"
+        stack.add(NAssignment("avar$i", newV))
+    }
+    val ASTORE_0 = Rule(Opcode.ASTORE_0) { _, _, _, vars, stack ->
+        val newV = stack.pop()
+        vars[1] = "avar0"
+        stack.add(NAssignment("avar0", newV))
+    }
     val ASTORE_1 = Rule(Opcode.ASTORE_1) { _, _, _, vars, stack ->
         val newV = stack.pop()
         vars[1] = "avar1"
@@ -32,6 +47,11 @@ object ASTORE {
         val newV = stack.pop()
         vars[2] = "avar2"
         stack.add(NAssignment("avar2", newV))
+    }
+    val ASTORE_3 = Rule(Opcode.ASTORE_3) { _, _, _, vars, stack ->
+        val newV = stack.pop()
+        vars[3] = "avar3"
+        stack.add(NAssignment("avar3", newV))
     }
 }
 

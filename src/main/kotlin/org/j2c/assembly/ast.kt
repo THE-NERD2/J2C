@@ -87,6 +87,9 @@ class NAssignment(val dest: String, val v: Node): Node("NAssignment") {
 class NStaticReference(val field: String): Node("NStaticReference") {
     override fun toString() = field
 }
+class NStaticAssignment(val field: String, val v: Node): Node("NStaticAssignment") {
+    override fun toString() = "$field = $v"
+}
 class NBoundReference(val obj: Node, val field: String): Node("NBoundReference") {
     override fun toString() = "$obj.$field"
 }
@@ -110,27 +113,20 @@ class NNew(val clazz: String): Node("NNew") {
     override fun toString() = "new $clazz"
 }
 
-sealed class NAdd(name: String, val left: Node, val right: Node): Node(name) {
-    override fun toString() = "$left + $right"
+class NBinOp(val type: String, val op: String, val left: Node, val right: Node): Node("NBinOp") {
+    override fun toString() = "$left $op $right"
 }
-sealed class NMul(name: String, val left: Node, val right: Node): Node(name) {
-    override fun toString() = "$left * $right"
+
+class NArrayLength(val array: Node): Node("NArrayLength") {
+    override fun toString() = "#$array"
 }
-sealed class NCmp(name: String, val left: Node, val right: Node): Node(name) {
-    override fun toString() = "$left vs $right"
-}
-class NIAdd(left: Node, right: Node): NAdd("NIAdd", left, right)
-class NIMul(left: Node, right: Node): NMul("NIMul", left, right)
-class NLCmp(left: Node, right: Node): NCmp("NLCmp", left, right)
 
 class NReturn: Node("NReturn") {
     override fun toString() = "return"
 }
-sealed class NValueReturn(name: String, val v: Node): Node(name) {
+class NValueReturn(val type: String, val v: Node): Node("NValueReturn") {
     override fun toString() = "return $v"
 }
-class NAReturn(v: Node): NValueReturn("NAReturn", v)
-class NIReturn(v: Node): NValueReturn("NIReturn", v)
 
 class NAThrow(val v: Node): Node("NAThrow") {
     override fun toString() = "throw $v"

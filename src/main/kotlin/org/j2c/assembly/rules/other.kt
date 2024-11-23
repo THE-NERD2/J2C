@@ -4,7 +4,16 @@ import javassist.bytecode.Opcode
 import org.j2c.assembly.NByte
 import org.j2c.assembly.NNew
 import org.j2c.assembly.NOther
+import org.j2c.assembly.NShort
 import org.j2c.assembly.findNClassByFullName
+
+@RuleContainer
+object SIPUSH {
+    val SIPUSH = Rule(Opcode.SIPUSH) { instructions, pos, _, _, stack ->
+        val v = instructions.byteAt(pos + 1)
+        stack.add(NShort(v.toShort()))
+    }
+}
 
 @RuleContainer
 object BIPUSH {

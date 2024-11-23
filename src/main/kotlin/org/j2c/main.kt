@@ -28,6 +28,7 @@ import kotlin.reflect.*
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.jvm.javaField
+import kotlin.reflect.jvm.internal.KotlinReflectionInternalError
 
 val rules = arrayListOf<Rule>()
 lateinit var classLoader: URLClassLoader
@@ -97,6 +98,8 @@ fun parse(name: String): NClass? {
                 }
             }
         }
+    } catch(_: KotlinReflectionInternalError) {
+        popNClass()
     } catch(_: Exception) {
         popNClass()
     } finally {
