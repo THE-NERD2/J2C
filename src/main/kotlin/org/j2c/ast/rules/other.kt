@@ -30,7 +30,7 @@ object LDC {
     val LDC = Rule(Opcode.LDC) { state ->
         val i = state.instructions.byteAt(state.pos + 1)
         val v = state.const.getLdcValue(i)
-        state.stack.push(NOther(v.toString()))
+        state.stack.add(NOther(v.toString()))
     }
 }
 
